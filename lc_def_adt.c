@@ -235,7 +235,7 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #1 WHE Discharge Capacitor A */
+    /* #1 WHE Discharge Capacitor A if > 95% */
     {
         .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
@@ -252,53 +252,53 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #2 (unused) */
+    /* #2  Discharge cap B if > 95% */
     {
-        .DefaultState        = LC_ACTION_NOT_USED,
+        .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
-        .RTSId               = 0,
-        .MaxFailsBeforeRTS   = 0,
+        .RTSId               = WHE_CAP_B_DISCHARGE_CC,
+        .MaxFailsBeforeRTS   = 1,
         .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 0,
-        .EventText           = { " " },
-        .RPNEquation         = { /* (WP_0) */
-                                 0,
+        .EventID             = 1002,
+        .EventText           = { "Discharge Capacitor B" },
+        .RPNEquation         = { /* (WP_1) */
+                                 1,
                                  LC_RPN_EQUAL
                                }
     },
 
-    /* #3 (unused) */
+    /* #3 If powered off, turn on SBC */
     {
-        .DefaultState        = LC_ACTION_NOT_USED,
+        .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
-        .RTSId               = 0,
-        .MaxFailsBeforeRTS   = 0,
+        .RTSId               = WHE_POWER_SBC_CC,
+        .MaxFailsBeforeRTS   = 6,
         .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 0,
-        .EventText           = { " " },
-        .RPNEquation         = { /* (WP_0) */
-                                 0,
+        .EventID             = 1003,
+        .EventText           = { "Powering on..." },
+        .RPNEquation         = { /* (WP_12) */
+                                 12,
                                  LC_RPN_EQUAL
                                }
     },
 
-    /* #4 (unused) */
+    /* #4 If not observing, take a picture */
     {
-        .DefaultState        = LC_ACTION_NOT_USED,
+        .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
-        .RTSId               = 0,
-        .MaxFailsBeforeRTS   = 0,
+        .RTSId               = WHE_OBS_START_CC,
+        .MaxFailsBeforeRTS   = 15,
         .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 0,
-        .EventText           = { " " },
-        .RPNEquation         = { /* (WP_0) */
-                                 0,
+        .EventID             = 1004,
+        .EventText           = { "Say cheese!" },
+        .RPNEquation         = { /* (WP_13) */
+                                 13,
                                  LC_RPN_EQUAL
                                }
     },
