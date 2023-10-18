@@ -275,7 +275,7 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #3 If not observing, and a cap A is charged enough and active, start obs */
+    /* #3 If not observing, and a cap is charged, then start obs */
     {
         .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
@@ -285,77 +285,18 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
         .MaxFailsBeforeRTS   = 1,
         .EventType           = CFE_EVS_INFORMATION,
         .EventID             = 1003,
-        .EventText           = { "Starting Observation w/ Cap A" },
+        .EventText           = { "Starting Observation" },
         .RPNEquation         = { /* (WP_13) */
                                  25,
-                                 16,
-                                 LC_RPN_AND,
-                                 13,
-                                 LC_RPN_AND,
-                                 LC_RPN_EQUAL
-                               }
-    },
-
-    /* #4 Same as above, on cap B*/
-    {
-        .DefaultState        = LC_APSTATE_ACTIVE,
-        .MaxPassiveEvents    = 0,
-        .MaxPassFailEvents   = 0,
-        .MaxFailPassEvents   = 0,
-        .RTSId               = WHE_OBS_START_CC,
-        .MaxFailsBeforeRTS   = 1,
-        .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 1004,
-        .EventText           = { "Starting Observation w/ Cap B" },
-        .RPNEquation         = { /* (WP_13) */
                                  26,
-                                 17,
-                                 LC_RPN_AND,
+                                 LC_RPN_OR,
                                  13,
                                  LC_RPN_AND,
                                  LC_RPN_EQUAL
                                }
     },
 
-    /* #5  Open louvers if temp is >20 and louvers are closed*/
-    {
-        .DefaultState        = LC_APSTATE_ACTIVE,
-        .MaxPassiveEvents    = 0,
-        .MaxPassFailEvents   = 0,
-        .MaxFailPassEvents   = 0,
-        .RTSId               = WHE_THERM_LOUVER_OPEN_CC,
-        .MaxFailsBeforeRTS   = 1,
-        .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 1005,
-        .EventText           = { "Opening louvers" },
-        .RPNEquation         = { /* (WP_0) */
-                                 8,
-                                 18,
-                                 LC_RPN_AND,
-                                 LC_RPN_EQUAL
-                               }
-    },
-
-    /* #6 Close louvers if temp <10 and louvers are open */
-    {
-        .DefaultState        = LC_APSTATE_ACTIVE,
-        .MaxPassiveEvents    = 0,
-        .MaxPassFailEvents   = 0,
-        .MaxFailPassEvents   = 0,
-        .RTSId               = WHE_THERM_LOUVER_CLOSE_CC,
-        .MaxFailsBeforeRTS   = 1,
-        .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 1006,
-        .EventText           = { "Closing louvers" },
-        .RPNEquation         = { /* (WP_0) */
-                                 9,
-                                 19,
-                                 LC_RPN_AND,
-                                 LC_RPN_EQUAL
-                               }
-    },
-
-    /* #7 If Cap A charge >= 80, and we're not observing, set it to ACTIVE */
+    /* #4 If cap A has 80+% charge, and we're not currently observing, set it to active */
     {
         .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
@@ -364,9 +305,9 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
         .RTSId               = WHE_CAP_A_ACTIVE_CC,
         .MaxFailsBeforeRTS   = 1,
         .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 1007,
-        .EventText           = { "Cap A is now ACTIVE" },
-        .RPNEquation         = { /* (WP_0) */
+        .EventID             = 1004,
+        .EventText           = { "Capacitor A now active" },
+        .RPNEquation         = { /* (WP_1) */
                                  14,
                                  LC_RPN_NOT,
                                  25,
@@ -375,7 +316,7 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #8 Same with Cap B */
+    /* #5 If cap B has 80+% change, and we're not currently observing, set it to active */
     {
         .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
@@ -384,9 +325,9 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
         .RTSId               = WHE_CAP_B_ACTIVE_CC,
         .MaxFailsBeforeRTS   = 1,
         .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 1008,
-        .EventText           = { "Cap B is now ACTIVE" },
-        .RPNEquation         = { /* (WP_0) */
+        .EventID             = 1005,
+        .EventText           = { "Capacitor B now active" },
+        .RPNEquation         = { /* (WP_1) */
                                  14,
                                  LC_RPN_NOT,
                                  26,
@@ -395,19 +336,70 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #9 (unused) */
+    /* #6 Open louvers if we're above optimal temperature range, with wiggle room */
     {
-        .DefaultState        = LC_ACTION_NOT_USED,
+        .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
-        .RTSId               = 0,
+        .RTSId               = WHE_THERM_LOUVER_OPEN_CC,
+        .MaxFailsBeforeRTS   = 5,
+        .EventType           = CFE_EVS_INFORMATION,
+        .EventID             = 1006,
+        .EventText           = { "Too hot! Opening louvers" },
+        .RPNEquation         = { /* (WP_0) */
+                                 8,
+                                 LC_RPN_EQUAL
+                               }
+    },
+
+    /* #7 Close louvers if we're below optimal temperature range */
+    {
+        .DefaultState        = LC_APSTATE_ACTIVE,
+        .MaxPassiveEvents    = 0,
+        .MaxPassFailEvents   = 0,
+        .MaxFailPassEvents   = 0,
+        .RTSId               = WHE_THERM_LOUVER_CLOSE_CC,
+        .MaxFailsBeforeRTS   = 0,
+        .EventType           = CFE_EVS_INFORMATION,
+        .EventID             = 1007,
+        .EventText           = { "Too cold! Closing louvers" },
+        .RPNEquation         = { /* (WP_0) */
+                                 9,
+                                 LC_RPN_EQUAL
+                               }
+    },
+
+    /* #8 Turn on heaters if we're reaching 0 */
+    {
+        .DefaultState        = LC_APSTATE_ACTIVE,
+        .MaxPassiveEvents    = 0,
+        .MaxPassFailEvents   = 0,
+        .MaxFailPassEvents   = 0,
+        .RTSId               = WHE_THERM_HTR_ON_CC,
+        .MaxFailsBeforeRTS   = 0,
+        .EventType           = CFE_EVS_INFORMATION,
+        .EventID             = 1008,
+        .EventText           = { "Freezing! Turning on heaters" },
+        .RPNEquation         = { /* (WP_0) */
+                                 11,
+                                 LC_RPN_EQUAL
+                               }
+    },
+
+    /* #9 Open louvers IMMEDIATELY if we're at 34 */
+    {
+        .DefaultState        = LC_APSTATE_ACTIVE,
+        .MaxPassiveEvents    = 0,
+        .MaxPassFailEvents   = 0,
+        .MaxFailPassEvents   = 0,
+        .RTSId               = WHE_THERM_LOUVER_OPEN_CC,
         .MaxFailsBeforeRTS   = 0,
         .EventType           = CFE_EVS_INFORMATION,
         .EventID             = 0,
-        .EventText           = { " " },
+        .EventText           = { "Roasting! Way too hot. Opening louvers" },
         .RPNEquation         = { /* (WP_0) */
-                                 0,
+                                 10,
                                  LC_RPN_EQUAL
                                }
     },
