@@ -317,7 +317,7 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #5  Open louvers if temp is >20 and louvers are closed*/
+    /* #5  Open louvers if temp is >20 and louvers are closed and we're not observing*/
     {
         .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
@@ -332,11 +332,14 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                  8,
                                  18,
                                  LC_RPN_AND,
+                                 14,
+                                 LC_RPN_NOT,
+                                 LC_RPN_AND,
                                  LC_RPN_EQUAL
                                }
     },
 
-    /* #6 Close louvers if temp <10 and louvers are open */
+    /* #6 Close louvers if temp <10 and louvers are open and we're not observing*/
     {
         .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
@@ -350,6 +353,9 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
         .RPNEquation         = { /* (WP_0) */
                                  9,
                                  19,
+                                 LC_RPN_AND,
+                                 14,
+                                 LC_RPN_NOT,
                                  LC_RPN_AND,
                                  LC_RPN_EQUAL
                                }
@@ -395,36 +401,36 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #9 (unused) */
+    /* #9 Turn on heaters IMMEDIATELY if temp = 1, can interrupt obs */
     {
-        .DefaultState        = LC_ACTION_NOT_USED,
+        .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
-        .RTSId               = 0,
-        .MaxFailsBeforeRTS   = 0,
+        .RTSId               = WHE_THERM_HTR_ON_CC,
+        .MaxFailsBeforeRTS   = 1,
         .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 0,
-        .EventText           = { " " },
+        .EventID             = 1009,
+        .EventText           = { "Freezing! Turning on heaters!" },
         .RPNEquation         = { /* (WP_0) */
-                                 0,
+                                 11,
                                  LC_RPN_EQUAL
                                }
     },
 
-    /* #10 (unused) */
+    /* #10 Open louvers IMMEDIATELY if temp = 34, can interrupt obs */
     {
-        .DefaultState        = LC_ACTION_NOT_USED,
+        .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
-        .RTSId               = 0,
-        .MaxFailsBeforeRTS   = 0,
+        .RTSId               = WHE_THERM_LOUVER_OPEN_CC,
+        .MaxFailsBeforeRTS   = 1,
         .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 0,
-        .EventText           = { " " },
+        .EventID             = 1010,
+        .EventText           = { "Burning up! Opening louvers!" },
         .RPNEquation         = { /* (WP_0) */
-                                 0,
+                                 10,
                                  LC_RPN_EQUAL
                                }
     },
