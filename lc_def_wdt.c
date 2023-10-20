@@ -236,7 +236,7 @@ LC_WDTEntry_t LC_DefaultWDT[LC_MAX_WATCHPOINTS] =
     /* #8 System temp > 20 (optimal temp upper bound) */
     {
         .DataType                   = LC_DATA_BYTE,
-        .OperatorID                 = LC_OPER_GE,
+        .OperatorID                 = LC_OPER_GT,
         .MessageID                  = WHE_HK_TLM_MID,
         .WatchpointOffset           = 19,
         .BitMask                    = LC_NO_BITMASK,

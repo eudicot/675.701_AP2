@@ -235,14 +235,14 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #1 WHE Discharge Capacitor A if > 95% and not observing*/
+    /* #1 WHE Discharge Capacitor A if > 95% and not observing and cap B is not discharging*/
     {
         .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
         .RTSId               = WHE_CAP_A_DISCHARGE_CC,
-        .MaxFailsBeforeRTS   = 1,
+        .MaxFailsBeforeRTS   = 2,
         .EventType           = CFE_EVS_INFORMATION,
         .EventID             = 1001,
         .EventText           = { "Discharge Capacitor A" },
@@ -251,18 +251,21 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                  LC_RPN_NOT,
                                  0,
                                  LC_RPN_AND,
+                                 6,
+                                 LC_RPN_NOT,
+                                 LC_RPN_AND,
                                  LC_RPN_EQUAL
                                }
     },
 
-    /* #2  Discharge cap B if > 95% and not observing*/
+    /* #2  Discharge cap B if > 95% and not observing and cap A is not discharging*/
     {
         .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
         .RTSId               = WHE_CAP_B_DISCHARGE_CC,
-        .MaxFailsBeforeRTS   = 1,
+        .MaxFailsBeforeRTS   = 2,
         .EventType           = CFE_EVS_INFORMATION,
         .EventID             = 1002,
         .EventText           = { "Discharge Capacitor B" },
@@ -270,6 +273,9 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                  14,
                                  LC_RPN_NOT,
                                  1,
+                                 LC_RPN_AND,
+                                 3,
+                                 LC_RPN_NOT,
                                  LC_RPN_AND,
                                  LC_RPN_EQUAL
                                }
@@ -324,7 +330,7 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
         .RTSId               = WHE_THERM_LOUVER_OPEN_CC,
-        .MaxFailsBeforeRTS   = 1,
+        .MaxFailsBeforeRTS   = 2,
         .EventType           = CFE_EVS_INFORMATION,
         .EventID             = 1005,
         .EventText           = { "Opening louvers" },
@@ -332,8 +338,7 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                  8,
                                  18,
                                  LC_RPN_AND,
-                                 14,
-                                 LC_RPN_NOT,
+                                 13,
                                  LC_RPN_AND,
                                  LC_RPN_EQUAL
                                }
@@ -346,7 +351,7 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
         .RTSId               = WHE_THERM_LOUVER_CLOSE_CC,
-        .MaxFailsBeforeRTS   = 1,
+        .MaxFailsBeforeRTS   = 2,
         .EventType           = CFE_EVS_INFORMATION,
         .EventID             = 1006,
         .EventText           = { "Closing louvers" },
@@ -354,8 +359,7 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                  9,
                                  19,
                                  LC_RPN_AND,
-                                 14,
-                                 LC_RPN_NOT,
+                                 13,
                                  LC_RPN_AND,
                                  LC_RPN_EQUAL
                                }
@@ -435,19 +439,25 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #11 (unused) */
+    /* #11 Turn off heaters if temp > 10, heaters are on, and not observing  */
     {
-        .DefaultState        = LC_ACTION_NOT_USED,
+        .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
         .MaxPassFailEvents   = 0,
         .MaxFailPassEvents   = 0,
-        .RTSId               = 0,
-        .MaxFailsBeforeRTS   = 0,
+        .RTSId               = WHE_THERM_HTR_OFF_CC,
+        .MaxFailsBeforeRTS   = 1,
         .EventType           = CFE_EVS_INFORMATION,
-        .EventID             = 0,
-        .EventText           = { " " },
+        .EventID             = 1011,
+        .EventText           = { "Warm enough. Turning heaters off" },
         .RPNEquation         = { /* (WP_0) */
-                                 0,
+                                 9,
+                                 LC_RPN_NOT,
+                                 14,
+                                 LC_RPN_NOT,
+                                 LC_RPN_AND,
+                                 21,
+                                 LC_RPN_AND,
                                  LC_RPN_EQUAL
                                }
     },
