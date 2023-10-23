@@ -146,7 +146,7 @@ LC_WDTEntry_t LC_DefaultWDT[LC_MAX_WATCHPOINTS] =
         .BitMask                    = LC_NO_BITMASK,
         .CustomFuncArgument         = 0,
         .ResultAgeWhenStale         = 0,
-        .ComparisonValue.Unsigned32 = 95,
+        .ComparisonValue.Unsigned32 = 100,
     },
 
     /* #1 Capacitor B Charge >= 95 */
@@ -158,7 +158,7 @@ LC_WDTEntry_t LC_DefaultWDT[LC_MAX_WATCHPOINTS] =
         .BitMask                    = LC_NO_BITMASK,
         .CustomFuncArgument         = 0,
         .ResultAgeWhenStale         = 0,
-        .ComparisonValue.Unsigned32 = 95,
+        .ComparisonValue.Unsigned32 = 100,
     },
 
     /* #2 Capacitor A State = 0 (Charging)*/
@@ -221,7 +221,7 @@ LC_WDTEntry_t LC_DefaultWDT[LC_MAX_WATCHPOINTS] =
         .ComparisonValue.Unsigned32 = 1,
     },
 
-    /* #7 Cap B state >= 2 (discharing) */
+    /* #7 Cap B state >= 2 (leaking/broken) */
    {
         .DataType                   = LC_DATA_BYTE,
         .OperatorID                 = LC_OPER_GE,

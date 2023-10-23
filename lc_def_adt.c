@@ -235,7 +235,7 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #1 WHE Discharge Capacitor A if > 95% and not observing and cap B is not discharging*/
+    /* #1 WHE Discharge Capacitor A if > 100% and not observing and cap B is not discharging*/
     {
         .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
@@ -258,7 +258,7 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                }
     },
 
-    /* #2  Discharge cap B if > 95% and not observing and cap A is not discharging*/
+    /* #2  Discharge cap B if > 100% and not observing and cap A is not discharging*/
     {
         .DefaultState        = LC_APSTATE_ACTIVE,
         .MaxPassiveEvents    = 0,
@@ -338,7 +338,8 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                  8,
                                  18,
                                  LC_RPN_AND,
-                                 13,
+                                 14,
+                                 LC_RPN_NOT,
                                  LC_RPN_AND,
                                  LC_RPN_EQUAL
                                }
@@ -359,7 +360,8 @@ LC_ADTEntry_t LC_DefaultADT[LC_MAX_ACTIONPOINTS] =
                                  9,
                                  19,
                                  LC_RPN_AND,
-                                 13,
+                                 14,
+                                 LC_RPN_NOT,
                                  LC_RPN_AND,
                                  LC_RPN_EQUAL
                                }
